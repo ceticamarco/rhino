@@ -128,6 +128,20 @@ testTableGenerator = TestList [
                         )
     ]
 
+testDivGenerator :: Test
+testDivGenerator = TestList [
+        "Normal div" ~: "<div id=\"testID\" class=\"testClass\">\ndiv</div>"
+                    ~=? emitHtml (Div "testID" "testClass" [Text "div"]),
+        "classless div" ~: "<div id=\"testID\">\ndiv</div>"
+                    ~=? emitHtml (Div "testID" "" [Text "div"]),
+        "IDless div" ~: "<div class=\"testClass\">\ndiv</div>"
+                    ~=? emitHtml (Div "" "testClass" [Text "div"]),
+        "property-less div" ~: "<div>\ndiv</div>"
+                    ~=? emitHtml (Div "" "" [Text "div"]),
+        "nested div" ~: "<div id=\"testID\" class=\"testClass\">\n<a href=\"http://example.com\">link</a></div>"
+                    ~=? emitHtml (Div "testID" "testClass" [Link [Text "link"] "http://example.com"])
+    ]
+
 emitterTests :: Test
 emitterTests = TestList
     [ TestLabel "testBold" testBoldEmitter
@@ -148,4 +162,5 @@ emitterTests = TestList
     , TestLabel "testTableHeader" testTableHeaderGenerator
     , TestLabel "testTableRow" testTableRowGenerator
     , TestLabel "testTable" testTableGenerator
+    , TestLabel "testDiv" testDivGenerator
     ]

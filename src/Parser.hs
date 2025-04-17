@@ -206,7 +206,7 @@ uListParser = do
   items <- some (uListItemParser <* optional newline)
   return $ UnorderedList items
 
--- Table header is defined as 'H<COLUMN-1>,...,<COLUMN-N>%'
+-- Table header is defined as 'H<COLUMN-1>$...$<COLUMN-N>%'
 tableHeaderParser :: Parser Element
 tableHeaderParser = do
   _       <- startToken
@@ -218,7 +218,7 @@ tableHeaderParser = do
     colsParser = nestedElementParser `sepBy1` char '$'
     endToken = string "%"
 
--- Table rows are defined as 'R<COLUMN-1>,...,<COLUMN-N>%'
+-- Table rows are defined as 'R<COLUMN-1>$...$<COLUMN-N>%'
 tableRowParser :: Parser Element
 tableRowParser = do
   _   <- startToken
@@ -240,6 +240,19 @@ tableParser = do
   return $ Table header rows
   where
     startToken = string "%T"
+    endToken = string "%"
+
+-- Div are defined as "%d<ID>$<CLASS>\n<BODY>%"
+divParser :: Parser Element
+divParser = do
+  _           <- startToken
+  idParser    <- manyTill anySingle "$"
+  classParser <- manyTill anySingle newline
+  bodyParser  <- many (try nestedElementParser)
+  _           <- endToken
+  return $ Div (T.pack idParser) (T.pack classParser) bodyParser
+  where
+    startToken = string "%d"
     endToken = string "%"
 
 -- The '%' character is defined as '%p%'
@@ -282,6 +295,7 @@ nestedElementParser =
   <|> try cbParser        <|> try mathExprParser    -- Block element parsers
   <|> try oListParser     <|> try uListParser       -- List parsers
   <|> try tableParser                               -- Table parsers
+  <|> try divParser                                 -- Div parser
   <|> try specialCharParser                         -- Special character parser
   <|> try textParser      <|> failParser            -- Generic parsers
 

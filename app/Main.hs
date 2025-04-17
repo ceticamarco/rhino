@@ -2,7 +2,23 @@ module Main where
 
 import Types (Args(..))
 import Options.Applicative
+    ( (<**>),
+      fullDesc,
+      header,
+      help,
+      info,
+      long,
+      metavar,
+      progDesc,
+      short,
+      strOption,
+      switch,
+      execParser,
+      helper,
+      Parser )
 import System.Exit (exitFailure)
+import Paths_rhino (version)
+import Data.Version (showVersion)
 import Engine (checkPaths, convertFiles)
 
 argsParser :: Parser Args
@@ -38,4 +54,4 @@ main = do
     opts = info (argsParser <**> helper)
       ( fullDesc
      <> progDesc "rhino - markup language for building static websites"
-     <> header "rhino v0.1.0.4 by Marco Cetica (c) 2025")
+     <> header ("rhino v" <> showVersion version <> " by Marco Cetica (c) 2025"))

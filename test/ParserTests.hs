@@ -19,7 +19,7 @@ import Parser
       refParser,
       specialCharParser,
       tableParser,
-      uListParser )
+      uListParser, divParser )
 import Types (Element(..))
 
 testBoldParser :: Test
@@ -122,6 +122,14 @@ testTableParser = TestList [
         ~=? parse tableParser "" "%T\nHA$B$C$D%\nRF$%*S%$T$F%\nRO$T$T$F%RI$II$III$IV%%" -- Missing '\n' is intentional"
   ]
 
+testDivParser :: Test
+testDivParser = TestList [
+    "Normal div" ~: Right (Div "testID" "testClass" [Text "div"]) ~=? parse divParser "" "%dtestID$testClass\ndiv%",
+    "classless div" ~: Right (Div "testID" "" [Text "div"]) ~=? parse divParser "" "%dtestID$\ndiv%",
+    "IDless div" ~: Right (Div "" "testClass" [Text "div"]) ~=? parse divParser "" "%d$testClass\ndiv%",
+    "property-less div" ~: Right (Div "" "" [Text "div"]) ~=? parse divParser "" "%d$\ndiv%",
+    "nested div" ~: Right (Div "" "" [Link [Text "link"] "http://example.com"]) ~=? parse divParser "" "%d$\n%[link](http://example.com)%%"
+  ]
 
 testSpecialChars :: Test
 testSpecialChars = TestList [
@@ -146,5 +154,6 @@ parserTests = TestList
   , TestLabel "testOrderedListParser" testOListParser
   , TestLabel "testUnorderedListParser" testUListParser
   , TestLabel "testTableParser" testTableParser
+  , TestLabel "testDivParser" testDivParser
   , TestLabel "testSpecialCharacters" testSpecialChars
   ]

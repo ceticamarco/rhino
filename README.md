@@ -120,7 +120,9 @@ M%
 %O<ITEM>%
 %O<ITEM>%
 ```
-**tip**: lists can be nested
+
+> [!TIP]
+> Lists can be nested
 
 - **Unordered list**
 ```text
@@ -138,6 +140,18 @@ RI$II$III$IV%
 %
 ```
 where `H` stands for a _new header_ and `R` stands for a _new row_.
+
+
+- **Div**
+```text
+%d<DIV_ID>$<DIV_CLASS>
+    <NESTED_CONTENT>
+%
+```
+
+> [!WARNING]
+> Both `<DIV_ID>` and `<DIV_CLASS>` are optional and can be omitted.
+> The parser expects the `$` token, though.
 
 ## Template file
 The Rhino compiler requires an additional HTML document called _template file_, which serves as a skeleton of the output webpage. 
@@ -384,12 +398,14 @@ Let's now see a complete example:
 
 %#Welcome%
 
+%dwelcomeBanner$centered
 %![welcome image](/static/welcome.jpg)%
 
 Welcome to my website! To get in touch with me, you can:
 
 %UWrite me an %[email](mailto:john@example.com)%%
 %USend me a handwritten letter%
+%
 
 TODO list:
 
@@ -429,9 +445,9 @@ M%
 
 
 %T
-HA,B,C,D%
-RFirst,Second,Third,Fourth%
-RI,II,III,IV%
+HA$B$C$D%
+RFirst$Second$Third$Fourth%
+RI$II$III$IV%
 %
 
 
@@ -445,9 +461,9 @@ which produces the following HTML page:
 <!DOCTYPE html>
 <html lang="en">
 	<!--
-	Powered by Rhino Template Engine(v0.1.0.4)
+	Powered by Rhino Template Engine(v0.1.0.5)
 	Developed by Marco Cetica
-	Timestamp: 2025-04-16T13:52:58-->
+	Timestamp: 2025-04-17T07:54:31-->
     <head>
         <!-- Meta attributes -->
         <meta charset="utf-8">
@@ -469,6 +485,7 @@ which produces the following HTML page:
 <h2 id="Welcome" class="post-subtitle">Welcome <a class="head-tag" href="#Welcome">§</a></h2>
 <div class="sp"></div>
 
+<div id="welcomeBanner" class="centered">
 <img class="post-img" alt="welcome image" src="/static/welcome.jpg" width="800" height="600">
 
 Welcome to my website! To get in touch with me, you can:
@@ -476,7 +493,8 @@ Welcome to my website! To get in touch with me, you can:
 <ul>
 <li>Write me an <a href="mailto:john@example.com">email</a></li>
 <li>Send me a handwritten letter</li>
-</ul>
+</ul></div>
+
 TODO list:
 
 <ol>
