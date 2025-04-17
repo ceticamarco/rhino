@@ -120,14 +120,17 @@ tableGenerator header rows = "<table>\n"
                            <> tBodyGenerator rows
                            <> "</table>"
 
-divGenerator :: Text -> Text -> [Element] -> Text
-divGenerator divId divClass divContent = "<div" <> genId divId <> genClass divClass <> ">\n"
+divGenerator :: Text -> Text -> Text -> [Element] -> Text
+divGenerator divId divClass divStyle divContent = "<div"
+                                       <> genId divId <> genClass divClass <> genStyle divStyle
+                                       <> ">\n"
                                        <> parsedContent 
                                        <> "</div>"
     where
         parsedContent = foldr ((<>) . emitHtml) T.empty divContent
         genId i = if T.null i then "" else " id=\"" <> i <> "\""
         genClass c = if T.null c then "" else " class=\"" <> c <> "\""
+        genStyle s = if T.null s then "" else " style=\"" <> s <> "\""
 
 emitHtml :: Element -> Text
 emitHtml (Bold text) = boldGenerator text
@@ -148,5 +151,5 @@ emitHtml (UnorderedList items) = unorderedListGenerator items
 emitHtml (TableHeader header) = tHeadGenerator (TableHeader header)
 emitHtml (TableRow row) = tRowGenerator (TableRow row)
 emitHtml (Table header rows) = tableGenerator header rows
-emitHtml (Div divId divClass divContent) = divGenerator divId divClass divContent
+emitHtml (Div divId divClass divStyle divContent) = divGenerator divId divClass divStyle divContent
 emitHtml (Text text) = text

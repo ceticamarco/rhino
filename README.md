@@ -144,14 +144,14 @@ where `H` stands for a _new header_ and `R` stands for a _new row_.
 
 - **Div**
 ```text
-%d<DIV_ID>$<DIV_CLASS>
+%d<DIV_ID>$<DIV_CLASS>$<STYLE>
     <NESTED_CONTENT>
 %
 ```
 
 > [!WARNING]
-> Both `<DIV_ID>` and `<DIV_CLASS>` are optional and can be omitted.
-> The parser expects the `$` token, though.
+> `<DIV_ID>`, `<DIV_CLASS>` and `<STYLE>` are optional and can be omitted.
+> The parser expects **two** `$` token, though.
 
 ## Template file
 The Rhino compiler requires an additional HTML document called _template file_, which serves as a skeleton of the output webpage. 
@@ -463,7 +463,7 @@ which produces the following HTML page:
 	<!--
 	Powered by Rhino Template Engine(v0.1.0.5)
 	Developed by Marco Cetica
-	Timestamp: 2025-04-17T07:54:31-->
+	Timestamp: 2025-04-17T09:02:14-->
     <head>
         <!-- Meta attributes -->
         <meta charset="utf-8">

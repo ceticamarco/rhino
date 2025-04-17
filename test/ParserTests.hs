@@ -124,11 +124,12 @@ testTableParser = TestList [
 
 testDivParser :: Test
 testDivParser = TestList [
-    "Normal div" ~: Right (Div "testID" "testClass" [Text "div"]) ~=? parse divParser "" "%dtestID$testClass\ndiv%",
-    "classless div" ~: Right (Div "testID" "" [Text "div"]) ~=? parse divParser "" "%dtestID$\ndiv%",
-    "IDless div" ~: Right (Div "" "testClass" [Text "div"]) ~=? parse divParser "" "%d$testClass\ndiv%",
-    "property-less div" ~: Right (Div "" "" [Text "div"]) ~=? parse divParser "" "%d$\ndiv%",
-    "nested div" ~: Right (Div "" "" [Link [Text "link"] "http://example.com"]) ~=? parse divParser "" "%d$\n%[link](http://example.com)%%"
+    "Normal div" ~: Right (Div "testID" "testClass" "color: black;" [Text "div"]) ~=? parse divParser "" "%dtestID$testClass$color: black;\ndiv%",
+    "classless div" ~: Right (Div "testID" "" "color: black;" [Text "div"]) ~=? parse divParser "" "%dtestID$$color: black;\ndiv%",
+    "IDless div" ~: Right (Div "" "testClass" "color: black;" [Text "div"]) ~=? parse divParser "" "%d$testClass$color: black;\ndiv%",
+    "styleless div" ~: Right (Div "testID" "TestClass" "" [Text "div"]) ~=? parse divParser "" "%dtestID$TestClass$\ndiv%",
+    "property-less div" ~: Right (Div "" "" "" [Text "div"]) ~=? parse divParser "" "%d$$\ndiv%",
+    "nested div" ~: Right (Div "" "" "" [Link [Text "link"] "http://example.com"]) ~=? parse divParser "" "%d$$\n%[link](http://example.com)%%"
   ]
 
 testSpecialChars :: Test

@@ -30,6 +30,6 @@ data Element = Bold [Element]
              | TableHeader [Element]
              | TableRow [Element]
              | Table Element [Element]
-             | Div Value Value [Element]
+             | Div Value Value Value [Element]
              | Text Value
              deriving (Eq, Show)

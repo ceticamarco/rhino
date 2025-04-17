@@ -242,15 +242,16 @@ tableParser = do
     startToken = string "%T"
     endToken = string "%"
 
--- Div are defined as "%d<ID>$<CLASS>\n<BODY>%"
+-- Div are defined as "%d<ID>$<CLASS>$<STYLE>\n<BODY>%"
 divParser :: Parser Element
 divParser = do
   _           <- startToken
   idParser    <- manyTill anySingle "$"
-  classParser <- manyTill anySingle newline
+  classParser <- manyTill anySingle "$"
+  styleParser <- manyTill anySingle newline
   bodyParser  <- many (try nestedElementParser)
   _           <- endToken
-  return $ Div (T.pack idParser) (T.pack classParser) bodyParser
+  return $ Div (T.pack idParser) (T.pack classParser) (T.pack styleParser) bodyParser
   where
     startToken = string "%d"
     endToken = string "%"
